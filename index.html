@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garuda Sentinel - Event Safety Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="assets/eagle-logo.png" alt="Garuda Sentinels Logo" class="logo-img">
+            GARUDA SENTINEL
+        </div>
+        <div class="nav-links">
+            <a href="#dashboard" class="active"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <a href="#livefeed"><i class="fas fa-video"></i> Live Feed</a>
+            <a href="#predictions"><i class="fas fa-brain"></i> Predictions</a>
+            <a href="#alerts"><i class="fas fa-bell"></i> Alerts</a>
+            <a href="#command"><i class="fas fa-terminal"></i> Command Interface</a>
+            <a href="#facedata"><i class="fas fa-user-shield"></i> Face Data</a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <h2><i class="fas fa-chart-line"></i> Dashboard Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3><i class="fas fa-users"></i> Live People Count</h3>
+                    <p class="count" id="livePeopleCount">2,547</p>
+                    <div class="trend positive">+12% from last hour</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-door-open"></i> Exit Count</h3>
+                    <p class="count" id="exitCount">1,238</p>
+                    <div class="trend neutral">Steady flow</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Alerts</h3>
+                    <div class="severity-counts">
+                        <div class="severity high">
+                            <span class="dot"></span>
+                            <span>High Priority: 2</span>
+                        </div>
+                        <div class="severity medium">
+                            <span class="dot"></span>
+                            <span>Medium Priority: 5</span>
+                        </div>
+                        <div class="severity low">
+                            <span class="dot"></span>
+                            <span>Low Priority: 8</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-smile"></i> Crowd Sentiment</h3>
+                    <div class="sentiment-counts">
+                        <div class="sentiment-bar">
+                            <div class="bar positive" style="width: 75%"></div>
+                            <div class="bar neutral" style="width: 20%"></div>
+                            <div class="bar negative" style="width: 5%"></div>
+                        </div>
+                        <div class="sentiment-labels">
+                            <span class="positive">75% Positive</span>
+                            <span class="neutral">20% Neutral</span>
+                            <span class="negative">5% Negative</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="zone-counts" id="zoneCounts">
+                <div class="stat-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Zone A</h3>
+                    <p class="count">324</p>
+                    <div class="zone-info">
+                        <div class="capacity-bar">
+                            <div class="filled" style="width: 65%"></div>
+                        </div>
+                        <span>65% of 500 capacity</span>
+                    </div>
+                    <div class="trend neutral">Steady flow</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Zone B</h3>
+                    <p class="count">156</p>
+                    <div class="zone-info">
+                        <div class="capacity-bar">
+                            <div class="filled" style="width: 31%"></div>
+                        </div>
+                        <span>31% of 500 capacity</span>
+                    </div>
+                    <div class="trend positive">Normal capacity</div>
+                </div>
+                <div class="stat-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Zone C</h3>
+                    <p class="count">467</p>
+                    <div class="zone-info">
+                        <div class="capacity-bar">
+                            <div class="filled" style="width: 93%"></div>
+                        </div>
+                        <span class="warning">93% of 500 capacity</span>
+                    </div>
+                    <div class="trend negative">Near capacity</div>
+                </div>
+            </div>
+            <div class="stat-card reports-card">
+                <h3><i class="fas fa-clipboard-list"></i> Live Reports</h3>
+                <p class="count" id="reportsCount">47</p>
+                <div class="trend positive">Last report: 2 minutes ago</div>
+            </div>
+        </section>
+
+        <!-- Live Feed Section -->
+        <section id="livefeed" class="section">
+            <h2><i class="fas fa-video"></i> Live Feed</h2>
+            <div class="feed-controls">
+                <div class="feed-type-controls">
+                    <button class="btn active" data-type="all"><i class="fas fa-video"></i> All Feeds</button>
+                    <button class="btn" data-type="cctv"><i class="fas fa-video"></i> CCTV Only</button>
+                    <button class="btn" data-type="drone"><i class="fas fa-drone"></i> Drone Only</button>
+                </div>
+                <button class="btn primary" id="addFeedBtn"><i class="fas fa-plus"></i> Add Feed</button>
+            </div>
+            <div class="feed-grid" id="feedGrid">
+                <!-- Camera feeds will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Add Feed Modal -->
+        <div class="modal" id="addFeedModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Feed</h3>
+                    <button class="close-btn"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="feed-type-selection">
+                        <button class="feed-type-btn" data-type="cctv">
+                            <i class="fas fa-cctv"></i>
+                            <span>CCTV Camera</span>
+                        </button>
+                        <button class="feed-type-btn" data-type="drone">
+                            <i class="fas fa-drone"></i>
+                            <span>Aerial Drone</span>
+                        </button>
+                    </div>
+                    <form id="addFeedForm">
+                        <div class="form-group">
+                            <label>Feed Name</label>
+                            <input type="text" placeholder="Enter feed name">
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <select>
+                                <option>Zone A</option>
+                                <option>Zone B</option>
+                                <option>Zone C</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn">Cancel</button>
+                            <button type="submit" class="btn primary">Add Feed</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predictions Section -->
+        <section id="predictions" class="section">
+            <h2><i class="fas fa-brain"></i> Predictions</h2>
+            <div class="predictions-grid">
+                <div class="prediction-card">
+                    <h3><i class="fas fa-chart-area"></i> Zone Congestion Levels</h3>
+                    <canvas id="congestionChart"></canvas>
+                </div>
+                <div class="prediction-card">
+                    <h3><i class="fas fa-route"></i> Dynamic Crowd Routing</h3>
+                    <div class="routing-alerts">
+                        <div class="alert warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="alert-content">
+                                <h4>Zone C Approaching Capacity</h4>
+                                <p>Recommended: Redirect 150 people to Zone B</p>
+                                <div class="route-suggestion">
+                                    <div class="route-path">
+                                        <span class="zone">Zone C</span>
+                                        <i class="fas fa-arrow-right"></i>
+                                        <span class="zone">Exit 2</span>
+                                        <i class="fas fa-arrow-right"></i>
+                                        <span class="zone">Zone B</span>
+                                    </div>
+                                    <button class="btn small">View Route</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="crowdRouting" class="crowd-routing-map"></div>
+                    <div class="route-stats">
+                        <div class="stat">
+                            <span class="label">Average Transfer Time</span>
+                            <span class="value">5 mins</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">Recommended Path Load</span>
+                            <span class="value">45%</span>
+                        </div>
+                    </div>
+                    <div class="route-controls">
+                        <button class="btn"><i class="fas fa-sync"></i> Update Routes</button>
+                        <button class="btn primary"><i class="fas fa-broadcast-tower"></i> Push Updates</button>
+                    </div>
+                </div>
+                <div class="prediction-card">
+                    <h3><i class="fas fa-exclamation-circle"></i> Multimodal Anomaly Detection</h3>
+                    <div class="anomaly-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Current Anomalies</span>
+                            <span class="stat-value">3</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Last 24 Hours</span>
+                            <span class="stat-value">12</span>
+                        </div>
+                    </div>
+                    <div class="anomaly-types">
+                        <div class="type-item">
+                            <i class="fas fa-fire"></i>
+                            <span class="type-label">Fire Risk</span>
+                            <span class="type-value low">Low</span>
+                        </div>
+                        <div class="type-item">
+                            <i class="fas fa-smog"></i>
+                            <span class="type-label">Smoke Detection</span>
+                            <span class="type-value none">None</span>
+                        </div>
+                        <div class="type-item">
+                            <i class="fas fa-users"></i>
+                            <span class="type-label">Stampede Risk</span>
+                            <span class="type-value medium">Medium</span>
+                        </div>
+                    </div>
+                    <div class="prediction-timeline">
+                        <h4>Congestion Prediction (Next 30 mins)</h4>
+                        <div class="timeline">
+                            <div class="time-point current">
+                                <span class="time">Now</span>
+                                <span class="value">67%</span>
+                            </div>
+                            <div class="time-point warning">
+                                <span class="time">+15min</span>
+                                <span class="value">82%</span>
+                            </div>
+                            <div class="time-point danger">
+                                <span class="time">+30min</span>
+                                <span class="value">95%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Alerts Section -->
+        <section id="alerts" class="section">
+            <h2><i class="fas fa-bell"></i> Alerts</h2>
+            <div class="alerts-header">
+                <div class="alert-filters">
+                    <button class="btn active" data-priority="all">All Alerts</button>
+                    <button class="btn priority-btn" data-priority="high">High Priority</button>
+                    <button class="btn priority-btn" data-priority="medium">Medium Priority</button>
+                    <button class="btn priority-btn" data-priority="low">Low Priority</button>
+                </div>
+            </div>
+            <div class="alerts-list">
+                <div class="alert-item" data-priority="high">
+                    <div class="alert-icon high">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Medical Emergency</h4>
+                            <span class="alert-time">2 mins ago</span>
+                        </div>
+                        <p>Medical assistance required in Zone A near Gate 2</p>
+                        <div class="alert-footer">
+                            <span class="alert-location"><i class="fas fa-map-marker-alt"></i> Zone A</span>
+                            <button class="btn small">Respond</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-item" data-priority="high">
+                    <div class="alert-icon high">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Overcrowding Detected</h4>
+                            <span class="alert-time">5 mins ago</span>
+                        </div>
+                        <p>Critical crowd density in Zone C - Immediate action required</p>
+                        <div class="alert-footer">
+                            <span class="alert-location"><i class="fas fa-map-marker-alt"></i> Zone C</span>
+                            <button class="btn small">Respond</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-item" data-priority="medium">
+                    <div class="alert-icon medium">
+                        <i class="fas fa-video-slash"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Camera Malfunction</h4>
+                            <span class="alert-time">15 mins ago</span>
+                        </div>
+                        <p>Camera #12 in Zone B is experiencing connectivity issues</p>
+                        <div class="alert-footer">
+                            <span class="alert-location"><i class="fas fa-map-marker-alt"></i> Zone B</span>
+                            <button class="btn small">Check</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-item" data-priority="medium">
+                    <div class="alert-icon medium">
+                        <i class="fas fa-temperature-high"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>High Temperature Warning</h4>
+                            <span class="alert-time">20 mins ago</span>
+                        </div>
+                        <p>Elevated temperature readings in Zone A food court area</p>
+                        <div class="alert-footer">
+                            <span class="alert-location"><i class="fas fa-map-marker-alt"></i> Zone A</span>
+                            <button class="btn small">Investigate</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-item" data-priority="low">
+                    <div class="alert-icon low">
+                        <i class="fas fa-battery-quarter"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-header">
+                            <h4>Low Battery Warning</h4>
+                            <span class="alert-time">30 mins ago</span>
+                        </div>
+                        <p>Drone #03 battery level below 25% - Return to base recommended</p>
+                        <div class="alert-footer">
+                            <span class="alert-location"><i class="fas fa-map-marker-alt"></i> Zone B</span>
+                            <button class="btn small">Recall</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Command Interface Section -->
+        <section id="command" class="section">
+            <h2><i class="fas fa-terminal"></i> Command Interface</h2>
+            <div class="command-interface">
+                <div class="command-header">
+                    <div class="command-tabs">
+                        <button class="tab active">Main Terminal</button>
+                        <button class="tab">Logs</button>
+                        <button class="tab">Scripts</button>
+                    </div>
+                    <div class="command-actions">
+                        <button class="btn small"><i class="fas fa-expand"></i></button>
+                        <button class="btn small"><i class="fas fa-cog"></i></button>
+                    </div>
+                </div>
+                <div class="command-history" id="commandHistory"></div>
+                <div class="command-input">
+                    <input type="text" id="commandInput" placeholder="Type a command...">
+                    <button class="command-send"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="command-suggestions">
+                    <button class="suggestion-chip">status</button>
+                    <button class="suggestion-chip">zones</button>
+                    <button class="suggestion-chip">alerts</button>
+                    <button class="suggestion-chip">help</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Face Data Section -->
+        <section id="facedata" class="section">
+            <h2><i class="fas fa-user-shield"></i> Face Data</h2>
+            <div class="face-data-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-circle"></i> Face Data Management</h2>
+                    <div class="header-actions">
+                        <button class="btn"><i class="fas fa-sync"></i> Refresh</button>
+                        <button class="btn"><i class="fas fa-download"></i> Export</button>
+                    </div>
+                </div>
+                <div class="face-data-filters">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search face data...">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="btn active">All</button>
+                        <button class="btn">Active</button>
+                        <button class="btn">Archived</button>
+                    </div>
+                </div>
+                <div class="face-data-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Face ID</th>
+                                <th>Timestamp</th>
+                                <th>Location</th>
+                                <th>Confidence</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>F_2024_0315_001</code></td>
+                                <td>2024-03-15 14:30:22</td>
+                                <td>Zone A - Gate 1</td>
+                                <td><div class="confidence-bar high" style="--confidence: 98%">98%</div></td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn small"><i class="fas fa-eye"></i></button>
+                                    <button class="btn small"><i class="fas fa-archive"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>F_2024_0315_002</code></td>
+                                <td>2024-03-15 14:30:45</td>
+                                <td>Zone B - Food Court</td>
+                                <td><div class="confidence-bar medium" style="--confidence: 85%">85%</div></td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn small"><i class="fas fa-eye"></i></button>
+                                    <button class="btn small"><i class="fas fa-archive"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>F_2024_0315_003</code></td>
+                                <td>2024-03-15 14:31:10</td>
+                                <td>Zone C - Exit 2</td>
+                                <td><div class="confidence-bar high" style="--confidence: 95%">95%</div></td>
+                                <td><span class="status-badge archived">Archived</span></td>
+                                <td>
+                                    <button class="btn small"><i class="fas fa-eye"></i></button>
+                                    <button class="btn small"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>F_2024_0315_004</code></td>
+                                <td>2024-03-15 14:31:55</td>
+                                <td>Zone A - Stage</td>
+                                <td><div class="confidence-bar low" style="--confidence: 65%">65%</div></td>
+                                <td><span class="status-badge active">Active</span></td>
+                                <td>
+                                    <button class="btn small"><i class="fas fa-eye"></i></button>
+                                    <button class="btn small"><i class="fas fa-archive"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><code>F_2024_0315_005</code></td>
+                                <td>2024-03-15 14:32:30</td>
+                                <td>Zone B - Shop 12</td>
+                                <td><div class="confidence-bar medium" style="--confidence: 88%">88%</div></td>
+                                <td><span class="status-badge archived">Archived</span></td>
+                                <td>
+                                    <button class="btn small"><i class="fas fa-eye"></i></button>
+                                    <button class="btn small"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination">
+                    <button class="btn"><i class="fas fa-chevron-left"></i></button>
+                    <span>Page 1 of 5</span>
+                    <button class="btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html> 
